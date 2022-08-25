@@ -10,9 +10,9 @@ public class Product {
     private String productName;
     private String productType;
     private String imageUrl;
-    private Integer price ;
+    private Double price ;
     private Integer stock ;
-    private Integer productContent;
+    private String productContent;
     private Date createDate;
     private Date lastModifiedDate;
 }
