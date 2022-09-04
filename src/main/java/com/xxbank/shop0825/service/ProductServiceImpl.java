@@ -18,8 +18,8 @@ public class ProductServiceImpl implements ProductService{
 
 
     @Override
-    public List<Product> getProducts(ProductType productType) {
-        return ProductDao.getProducts(productType);
+    public List<Product> getProducts(ProductType productType,String search) {
+        return ProductDao.getProducts(productType,search);
     }
 
     @Override

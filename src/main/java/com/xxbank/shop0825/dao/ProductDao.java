@@ -7,7 +7,7 @@ import com.xxbank.shop0825.model.ProductRequest;
 import java.util.List;
 
 public interface ProductDao {
-     List<Product> getProducts(ProductType productType);
+     List<Product> getProducts(ProductType productType,String search);
      Product getProductById(Integer productId);
      Integer createProduct(ProductRequest productRequest);
      void updateProduct(Integer productId,ProductRequest productRequest);
