@@ -1,13 +1,11 @@
 package com.xxbank.shop0825.controller;
 
-import com.sun.net.httpserver.HttpExchange;
 import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.model.Product;
 import com.xxbank.shop0825.model.ProductQueryParams;
 import com.xxbank.shop0825.model.ProductRequest;
 import com.xxbank.shop0825.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +22,21 @@ public class ProductController {
 
     @GetMapping ("/products")
     public ResponseEntity<List<Product>> getProducts(
+            //查詢條件 filtering
             @RequestParam (required = false) ProductType productType,
-            @RequestParam (required = false) String search
+            @RequestParam (required = false) String search,
+
+            //預設排序 sorting
+            @RequestParam (defaultValue = "create_date") String orderBy,
+            @RequestParam (defaultValue = "desc")String sort
+
     ){
+        //傳遞參數>塞值
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setProductType(productType);
         productQueryParams.setSearch(search);
+        productQueryParams.setOrderBy(orderBy);
+        productQueryParams.setSort(sort);
 
         List<Product> list = productService.getProducts(productQueryParams) ;
         return ResponseEntity.status(HttpStatus.OK).body(list);
