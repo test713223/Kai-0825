@@ -1,5 +1,6 @@
 package com.xxbank.shop0825.dao;
 
+import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.model.Product;
 import com.xxbank.shop0825.model.ProductRequest;
 import com.xxbank.shop0825.rowmapper.ProductRowMapper;
@@ -23,10 +24,23 @@ public class ProductDaoImpl implements ProductDao {
     @Qualifier("test1JdbcTemplate")
     private NamedParameterJdbcTemplate test1JdbcTemplate ;
 
-    //查詢所有商品
+    //查詢特定分類商品
     @Override
-    public Product getProducts() {
-        return null;
+    public List<Product> getProducts(ProductType productType) {
+        //sql
+        String sql = " SELECT product_id,product_name,product_type,image_url,price,stock,product_content,create_date,last_modified_date" +
+                     " FROM product WHERE 1=1 " ;
+        //map
+        Map<String,Object> map = new HashMap<>();
+        if(productType != null){
+            sql += " AND product_type = :productType";
+            map.put("productType",productType.name());//Enum.name() 可以找自訂內容的關鍵字，轉為String顯示
+        }
+
+        //執行語法
+        List<Product> productList =  test1JdbcTemplate.query(sql,map,new ProductRowMapper());
+
+        return productList;
     }
 
     //查詢特定商品by id
