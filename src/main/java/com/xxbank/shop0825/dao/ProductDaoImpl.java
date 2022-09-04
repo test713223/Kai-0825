@@ -49,6 +49,10 @@ public class ProductDaoImpl implements ProductDao {
         //排序語法,ORDER BY 只能用字串拼接方式，無法用:orderBy,不用if檢查是因為contorller有設定預設值
             sql += " ORDER BY " +productQueryParams.getOrderBy() + " " +productQueryParams.getSort();
 
+        //分頁語法,LIMIT=取幾筆,OFFSET=從第幾筆開始
+            sql += " LIMIT :limit OFFSET :offset ";
+            map.put("limit",productQueryParams.getLimit());
+            map.put("offset",productQueryParams.getOffset());
 
         //執行語法
         List<Product> productList =  test1JdbcTemplate.query(sql,map,new ProductRowMapper());
