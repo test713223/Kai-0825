@@ -1,7 +1,6 @@
 package com.xxbank.shop0825.service;
 
 import com.xxbank.shop0825.dao.ProductDao;
-import com.xxbank.shop0825.dao.ProductDaoImpl;
 import com.xxbank.shop0825.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

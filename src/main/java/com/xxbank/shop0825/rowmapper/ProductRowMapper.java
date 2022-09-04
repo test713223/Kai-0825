@@ -1,5 +1,6 @@
 package com.xxbank.shop0825.rowmapper;
 
+import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,7 +16,12 @@ public class ProductRowMapper implements RowMapper<Product> {
 
         product.setProductId(resultSet.getInt("product_id"));
         product.setProductName(resultSet.getString("product_name"));
-        product.setProductType(resultSet.getString("product_type"));
+
+        //先用字串接resultSet >在用Enum.ValueOf(塞字串)
+        String ProductTypeStr =  resultSet.getString("product_type") ;
+        ProductType producttype = ProductType.valueOf(ProductTypeStr);
+        product.setProductType(producttype);
+
         product.setImageUrl(resultSet.getString("image_url"));
         product.setPrice(resultSet.getDouble("price"));
         product.setStock(resultSet.getInt("stock"));
