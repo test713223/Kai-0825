@@ -49,6 +49,7 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
+    //新增商品
     @Override
     public Integer createProduct(ProductRequest productRequest) {
         //sql
@@ -75,6 +76,7 @@ public class ProductDaoImpl implements ProductDao {
         return keyHolder.getKey().intValue();
     }
 
+    //修改商品by id
     @Override
     public void updateProduct(Integer productId, ProductRequest productRequest) {
         //sql
@@ -96,4 +98,19 @@ public class ProductDaoImpl implements ProductDao {
         //執行語法
         test1JdbcTemplate.update(sql,map);
     }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        //sql
+        String sql = "DELETE FROM product WHERE product_id =:productId";
+
+        //map
+        Map<String,Object> map = new HashMap<>();
+        map.put("productId",productId);
+
+        //執行語法
+        test1JdbcTemplate.update(sql,map);
+    }
+
+
 }
