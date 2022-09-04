@@ -17,10 +17,11 @@ public class ProductRowMapper implements RowMapper<Product> {
         product.setProductId(resultSet.getInt("product_id"));
         product.setProductName(resultSet.getString("product_name"));
 
-        //先用字串接resultSet >在用Enum.ValueOf(塞字串)
-        String ProductTypeStr =  resultSet.getString("product_type") ;
-        ProductType producttype = ProductType.valueOf(ProductTypeStr);
-        product.setProductType(producttype);
+        //先用字串接resultSet >在用Enum.ValueOf(塞字串),
+        //String ProductTypeStr =  resultSet.getString("product_type") ;
+        //ProductType producttype = ProductType.valueOf(ProductTypeStr);
+        //product.setProductType(producttype);
+        product.setProductType(ProductType.valueOf(resultSet.getString("product_type")));
 
         product.setImageUrl(resultSet.getString("image_url"));
         product.setPrice(resultSet.getDouble("price"));
