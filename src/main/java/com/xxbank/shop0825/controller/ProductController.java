@@ -3,6 +3,7 @@ package com.xxbank.shop0825.controller;
 import com.sun.net.httpserver.HttpExchange;
 import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.model.Product;
+import com.xxbank.shop0825.model.ProductQueryParams;
 import com.xxbank.shop0825.model.ProductRequest;
 import com.xxbank.shop0825.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,12 @@ public class ProductController {
     public ResponseEntity<List<Product>> getProducts(
             @RequestParam (required = false) ProductType productType,
             @RequestParam (required = false) String search
-            ){
-        List<Product> list = productService.getProducts(productType,search) ;
+    ){
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setProductType(productType);
+        productQueryParams.setSearch(search);
+
+        List<Product> list = productService.getProducts(productQueryParams) ;
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 

@@ -2,6 +2,7 @@ package com.xxbank.shop0825.dao;
 
 import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.model.Product;
+import com.xxbank.shop0825.model.ProductQueryParams;
 import com.xxbank.shop0825.model.ProductRequest;
 import com.xxbank.shop0825.rowmapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ProductDaoImpl implements ProductDao {
 
     //查詢特定分類商品
     @Override
-    public List<Product> getProducts(ProductType productType,String search) {
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
         //sql
         String sql = " SELECT product_id,product_name,product_type,image_url,price,stock,product_content,create_date,last_modified_date" +
                      " FROM product WHERE 1=1 " ;
@@ -34,15 +35,15 @@ public class ProductDaoImpl implements ProductDao {
         Map<String,Object> map = new HashMap<>();
 
         //產品類別
-        if(productType != null){
+        if(productQueryParams.getProductType() != null){
             sql += " AND product_type = :productType";
-            map.put("productType",productType.name());//Enum.name() 可以找自訂內容的關鍵字，轉為String顯示
+            map.put("productType",productQueryParams.getProductType().name());//Enum.name() 可以找自訂內容的關鍵字，轉為String顯示
         }
 
         //關鍵字搜尋特定商品,模糊查詢
-        if(search != null){
+        if(productQueryParams.getSearch() != null){
             sql += " AND product_name LIKE  :search";
-            map.put("search","%" + search + "%");
+            map.put("search","%" + productQueryParams.getSearch() + "%");
         }
 
         //執行語法

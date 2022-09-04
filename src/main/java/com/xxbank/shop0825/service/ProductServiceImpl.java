@@ -3,6 +3,7 @@ package com.xxbank.shop0825.service;
 import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.dao.ProductDao;
 import com.xxbank.shop0825.model.Product;
+import com.xxbank.shop0825.model.ProductQueryParams;
 import com.xxbank.shop0825.model.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,8 @@ public class ProductServiceImpl implements ProductService{
 
 
     @Override
-    public List<Product> getProducts(ProductType productType,String search) {
-        return ProductDao.getProducts(productType,search);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return ProductDao.getProducts(productQueryParams);
     }
 
     @Override
