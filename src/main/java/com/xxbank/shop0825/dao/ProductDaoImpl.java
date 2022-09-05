@@ -33,33 +33,16 @@ public class ProductDaoImpl implements ProductDao {
         //map
         Map<String,Object> map = new HashMap<>();
 
-        //產品類別
-        if(productQueryParams.getProductType() != null){
-            sql += " AND product_type = :productType ";
-            map.put("productType",productQueryParams.getProductType().name());//Enum.name() 可以找自訂內容的關鍵字，轉為String顯示
-        }
-
-        //關鍵字搜尋特定商品,模糊查詢
-        if(productQueryParams.getSearch() != null){
-            sql += " AND product_name LIKE  :search ";
-            map.put("search","%" + productQueryParams.getSearch() + "%");
-        }
-
-        //排序語法,ORDER BY 只能用字串拼接方式，無法用:orderBy,不用if檢查是因為contorller有設定預設值
-            sql += " ORDER BY " +productQueryParams.getOrderBy() + " " +productQueryParams.getSort();
-
-        //分頁語法,LIMIT=取幾筆,OFFSET=從第幾筆開始
-            sql += " LIMIT :limit OFFSET :offset ";
-            map.put("limit",productQueryParams.getLimit());
-            map.put("offset",productQueryParams.getOffset());
+        //商品類別及關鍵字查詢
+        sql = addFilteringSql(productQueryParams,sql,map);
 
         //執行語法
-        List<Product> productList =  test1JdbcTemplate.query(sql,map,new ProductRowMapper());
+        List<Product> productList =  test1JdbcTemplate.query(sql,map,new ProductRowMapper());//JdbcTemplate需要再練習
 
         return productList;
     }
 
-    //查詢特定商品類別+關鍵字查詢+總筆數回傳
+    //查詢總筆數
     @Override
     public Integer gettotalProducts(ProductQueryParams productQueryParams) {
         //sql
@@ -68,18 +51,11 @@ public class ProductDaoImpl implements ProductDao {
         //map
         Map<String,Object> map = new HashMap<>();
 
-        //分類查詢
-        if(productQueryParams.getProductType() != null){
-            sql += " AND product_type =:productType ";
-            map.put("productType",productQueryParams.getProductType().name());//取Enum類型>要用name轉為字串
-        }
+        //商品類別及關鍵字查詢
+        sql = addFilteringSql(productQueryParams,sql,map);
 
-        //關鍵字查詢
-        if (productQueryParams.getSearch() != null){
-            sql += " AND  product_name LIKE :search " ;
-            map.put("search","%" + productQueryParams.getSearch() + "%"); //使用LIKE查詢%符號不能直接放在sql裡面
-        }
-        Integer total = test1JdbcTemplate.queryForObject(sql,map,Integer.class);
+        //總筆數
+        Integer total = test1JdbcTemplate.queryForObject(sql,map,Integer.class);//將回傳的值轉為java物件
 
         return total;
     }
@@ -165,6 +141,32 @@ public class ProductDaoImpl implements ProductDao {
 
         //執行語法
         test1JdbcTemplate.update(sql,map);
+    }
+
+    //商品類別、關鍵字查詢、分頁及排序
+    private String addFilteringSql(ProductQueryParams productQueryParams,String sql ,Map<String,Object> map){
+
+        //分類查詢
+        if(productQueryParams.getProductType() != null){
+            sql += " AND product_type =:productType ";
+            map.put("productType",productQueryParams.getProductType().name());//取Enum類型>要用name轉為字串
+        }
+
+        //關鍵字查詢 (模糊查詢)
+        if (productQueryParams.getSearch() != null){
+            sql += " AND  product_name LIKE :search " ;
+            map.put("search","%" + productQueryParams.getSearch() + "%"); //使用LIKE查詢%符號不能直接放在sql裡面
+        }
+
+        //分頁語法,LIMIT=取幾筆,OFFSET=從第幾筆開始
+        sql += " LIMIT :limit OFFSET :offset ";
+        map.put("limit",productQueryParams.getLimit());
+        map.put("offset",productQueryParams.getOffset());
+
+        //排序語法,ORDER BY 只能用字串拼接方式，無法用:orderBy,不用if檢查是因為controller有設定預設值
+        sql += " ORDER BY " +productQueryParams.getOrderBy() + " " +productQueryParams.getSort();
+
+        return sql;
     }
 
 
