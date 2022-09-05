@@ -24,7 +24,7 @@ public class ProductDaoImpl implements ProductDao {
     @Qualifier("test1JdbcTemplate")
     private NamedParameterJdbcTemplate test1JdbcTemplate ;
 
-    //查詢特定分類商品
+    //條件查詢
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         //sql
@@ -42,7 +42,7 @@ public class ProductDaoImpl implements ProductDao {
         return productList;
     }
 
-    //查詢總筆數
+    //條件查詢-總筆數
     @Override
     public Integer gettotalProducts(ProductQueryParams productQueryParams) {
         //sql
@@ -60,7 +60,6 @@ public class ProductDaoImpl implements ProductDao {
         return total;
     }
 
-    //查詢特定商品by id
     @Override
     public Product getProductById(Integer productId) {
         //產生sql
@@ -80,7 +79,6 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
-    //新增商品
     @Override
     public Integer createProduct(ProductRequest productRequest) {
         //sql
@@ -158,13 +156,13 @@ public class ProductDaoImpl implements ProductDao {
             map.put("search","%" + productQueryParams.getSearch() + "%"); //使用LIKE查詢%符號不能直接放在sql裡面
         }
 
+        //排序語法,ORDER BY 只能用字串拼接方式，無法用:orderBy,不用if檢查是因為controller有設定預設值
+        sql += " ORDER BY " +productQueryParams.getOrderBy() + " " +productQueryParams.getSort();
+
         //分頁語法,LIMIT=取幾筆,OFFSET=從第幾筆開始
         sql += " LIMIT :limit OFFSET :offset ";
         map.put("limit",productQueryParams.getLimit());
         map.put("offset",productQueryParams.getOffset());
-
-        //排序語法,ORDER BY 只能用字串拼接方式，無法用:orderBy,不用if檢查是因為controller有設定預設值
-        sql += " ORDER BY " +productQueryParams.getOrderBy() + " " +productQueryParams.getSort();
 
         return sql;
     }

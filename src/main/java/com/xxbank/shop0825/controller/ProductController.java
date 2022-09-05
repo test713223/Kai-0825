@@ -38,7 +38,6 @@ public class ProductController {
             //分頁 Pagination
             @RequestParam (defaultValue = "5") @Max(1000) @Min(0) Integer limit,
             @RequestParam (defaultValue = "0") @Min(0) Integer offset
-
     ){
         //傳遞參數>塞值
         ProductQueryParams productQueryParams = new ProductQueryParams();
@@ -51,7 +50,6 @@ public class ProductController {
 
         //丟入參數、取得回傳商品列表的json格式的List
         List<Product> list = productService.getProducts(productQueryParams) ;
-
 
         //取得total總數
         Integer total =  productService.gettotalProducts(productQueryParams);
