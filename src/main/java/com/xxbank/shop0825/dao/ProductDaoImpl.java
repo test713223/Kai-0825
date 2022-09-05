@@ -1,6 +1,5 @@
 package com.xxbank.shop0825.dao;
 
-import com.xxbank.shop0825.constant.ProductType;
 import com.xxbank.shop0825.model.Product;
 import com.xxbank.shop0825.model.ProductQueryParams;
 import com.xxbank.shop0825.model.ProductRequest;
@@ -36,13 +35,13 @@ public class ProductDaoImpl implements ProductDao {
 
         //產品類別
         if(productQueryParams.getProductType() != null){
-            sql += " AND product_type = :productType";
+            sql += " AND product_type = :productType ";
             map.put("productType",productQueryParams.getProductType().name());//Enum.name() 可以找自訂內容的關鍵字，轉為String顯示
         }
 
         //關鍵字搜尋特定商品,模糊查詢
         if(productQueryParams.getSearch() != null){
-            sql += " AND product_name LIKE  :search";
+            sql += " AND product_name LIKE  :search ";
             map.put("search","%" + productQueryParams.getSearch() + "%");
         }
 
@@ -60,11 +59,36 @@ public class ProductDaoImpl implements ProductDao {
         return productList;
     }
 
+    //查詢特定商品類別+關鍵字查詢+總筆數回傳
+    @Override
+    public Integer gettotalProducts(ProductQueryParams productQueryParams) {
+        //sql
+        String sql = " SELECT COUNT(*) FROM product WHERE 1=1 " ;
+
+        //map
+        Map<String,Object> map = new HashMap<>();
+
+        //分類查詢
+        if(productQueryParams.getProductType() != null){
+            sql += " AND product_type =:productType ";
+            map.put("productType",productQueryParams.getProductType().name());//取Enum類型>要用name轉為字串
+        }
+
+        //關鍵字查詢
+        if (productQueryParams.getSearch() != null){
+            sql += " AND  product_name LIKE :search " ;
+            map.put("search","%" + productQueryParams.getSearch() + "%"); //使用LIKE查詢%符號不能直接放在sql裡面
+        }
+        Integer total = test1JdbcTemplate.queryForObject(sql,map,Integer.class);
+
+        return total;
+    }
+
     //查詢特定商品by id
     @Override
     public Product getProductById(Integer productId) {
         //產生sql
-        String sql = " SELECT * FROM product WHERE product_id = :productId";
+        String sql = " SELECT * FROM product WHERE product_id = :productId ";
 
         //產生Map
         Map<String,Object> map = new HashMap<>();
@@ -84,8 +108,8 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Integer createProduct(ProductRequest productRequest) {
         //sql
-        String sql = "INSERT INTO product (product_name,product_type,image_url,price,stock,product_content,create_date,last_modified_date)" +
-                     "VALUES              (:productName,:productType,:imageUrl,:price,:stock,:productContent,:createDate,:lastModifiedDate)";
+        String sql = " INSERT INTO product (product_name,product_type,image_url,price,stock,product_content,create_date,last_modified_date) " +
+                     " VALUES              (:productName,:productType,:imageUrl,:price,:stock,:productContent,:createDate,:lastModifiedDate) ";
         //map 塞值
         Map<String,Object> map = new HashMap<>();
         map.put("productName",productRequest.getProductName());
@@ -111,10 +135,10 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void updateProduct(Integer productId, ProductRequest productRequest) {
         //sql
-        String sql  = "UPDATE  product " +
-                      "SET product_name=:productName, product_type=:productType, image_url=:imageUrl, " +
-                      "price=:price, stock=:stock, product_content=:productContent, last_modified_date=:lastModifiedDate " +
-                      "WHERE   product_id =:productId " ;
+        String sql  = " UPDATE  product " +
+                      " SET product_name=:productName, product_type=:productType, image_url=:imageUrl, " +
+                      " price=:price, stock=:stock, product_content=:productContent, last_modified_date=:lastModifiedDate " +
+                      " WHERE   product_id =:productId " ;
         //塞值
         Map<String,Object> map = new HashMap<>();
         map.put("productId",productId);
@@ -133,7 +157,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void deleteProductById(Integer productId) {
         //sql
-        String sql = "DELETE FROM product WHERE product_id =:productId";
+        String sql = " DELETE FROM product WHERE product_id =:productId ";
 
         //map
         Map<String,Object> map = new HashMap<>();

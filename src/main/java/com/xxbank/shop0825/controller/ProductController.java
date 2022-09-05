@@ -1,6 +1,7 @@
 package com.xxbank.shop0825.controller;
 
 import com.xxbank.shop0825.constant.ProductType;
+import com.xxbank.shop0825.model.PageReuqest;
 import com.xxbank.shop0825.model.Product;
 import com.xxbank.shop0825.model.ProductQueryParams;
 import com.xxbank.shop0825.model.ProductRequest;
@@ -25,7 +26,7 @@ public class ProductController {
 
 
     @GetMapping ("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<PageReuqest<Product>> getProducts(
             //查詢條件 filtering
             @RequestParam (required = false) ProductType productType,
             @RequestParam (required = false) String search,
@@ -48,8 +49,20 @@ public class ProductController {
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
 
+        //丟入參數、取得回傳商品列表的json格式的List
         List<Product> list = productService.getProducts(productQueryParams) ;
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+
+
+        //取得total總數
+        Integer total =  productService.gettotalProducts(productQueryParams);
+
+        PageReuqest<Product> page = new PageReuqest<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(list);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
 

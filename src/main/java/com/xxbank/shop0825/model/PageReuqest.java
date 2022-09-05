@@ -1,0 +1,13 @@
+package com.xxbank.shop0825.model;
+
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class PageReuqest<T> {
+    private Integer limit ;
+    private Integer offset ;
+    private Integer total ;
+    private List<T> results;
+}
