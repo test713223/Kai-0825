@@ -1,11 +1,13 @@
 package com.xxbank.shop0825.model;
 
 import com.xxbank.shop0825.constant.ProductType;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 @Data
+@Builder
 public class ProductRequest {
 
     @NotNull

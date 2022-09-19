@@ -4,5 +4,5 @@ public enum ProductType {
     FOOD,
     JUICE,
     CAKE,
-    TOP_CAKE
+    TOP_CAKE;
 }

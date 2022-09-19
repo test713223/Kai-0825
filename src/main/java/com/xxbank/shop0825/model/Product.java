@@ -1,11 +1,13 @@
 package com.xxbank.shop0825.model;
 
 import com.xxbank.shop0825.constant.ProductType;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@Builder
 public class Product {
     private Integer productId;
     private String productName;
