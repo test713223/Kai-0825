@@ -7,7 +7,6 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@Builder
 public class Product {
     private Integer productId;
     private String productName;
